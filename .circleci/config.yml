@@ -51,7 +51,7 @@ jobs: # a collection of steps
                 name: release-minor-version-step
                 command: |
                   echo "build job, commit message with /"[major]/" >> $GIT_COMMIT_MESSAGE"
-                  mvn --batch-mode release:clean release:prepare release:perform -DskipTests -Darguments=-DskipTests -s .circleci/settings.xml
+                  mvn --batch-mode release:clean release:prepare release:perform -Darguments="-Dmaven.javadoc.skip=true -Dmaven.test.skipTests=true -Dmaven.test.skip=true" -s .circleci/settings.xml
 
       #                  mvn --batch-mode clean -DskipTests -Darguments=-DskipTests release:prepare release:perform -s .circleci/settings.xml
       - when:
@@ -71,7 +71,7 @@ jobs: # a collection of steps
                 name: release-major-version-step
                 command: |
                   echo "build job, commit message without /"[major]/" >> $GIT_COMMIT_MESSAGE"
-                  mvn --batch-mode release:clean release:prepare release:perform -DskipTests -Darguments=-DskipTests -s .circleci/settings.xml
+                  mvn --batch-mode release:clean release:prepare release:perform -Darguments="-Dmaven.javadoc.skip=true -Dmaven.test.skipTests=true -Dmaven.test.skip=true" -s .circleci/settings.xml
   #  -Darguments="-Dmaven.javadoc.skip=true -Dmaven.test.skipTests=true -Dmaven.test.skip=true"
   build_master:
     docker:
