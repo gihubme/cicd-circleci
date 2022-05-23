@@ -177,7 +177,7 @@
                     <arguments>$(arguments)</arguments>
                     <scmCommentPrefix>[maven-release-plugin] [skip ci]</scmCommentPrefix>
                     <autoVersionSubmodules>true</autoVersionSubmodules>
-                    <tagNameFormat>v@{project.version}</tagNameFormat>
+                    <!--                    <tagNameFormat>v@{project.version}</tagNameFormat>-->
                     <useReleaseProfile>false</useReleaseProfile>
                     <!--<developmentVersion>
                         ${parsedVersion.majorVersion}.${parsedVersion.minorVersion}.${parsedVersion.nextPatchVersion}-SNAPSHOT
