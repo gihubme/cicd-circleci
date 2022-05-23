@@ -45,13 +45,13 @@ jobs: # a collection of steps
             - run:
                 name: increase-minor-version-step
                 command: |
-                  echo "build job, commit message with /"[major]/" >> $GIT_COMMIT_MESSAGE"
+                  echo "build job, commit message with /"[major]/" >> \"$GIT_COMMIT_MESSAGE"\"
                   mvn --batch-mode build-helper:parse-version versions:set -DnewVersion='${parsedVersion.nextMajorVersion}.0.0-SNAPSHOT' versions:commit
             - run:
                 name: release-minor-version-step
                 command: |
-                  echo "build job, commit message with /"[major]/" >> $GIT_COMMIT_MESSAGE"
-                  mvn --batch-mode release:clean release:prepare release:perform -Darguments="-Dmaven.javadoc.skip=true -Dmaven.test.skipTests=true -Dmaven.test.skip=true" -s .circleci/settings.xml
+                  echo "build job, commit message with /"[major]/" >> \"$GIT_COMMIT_MESSAGE"\"
+                  mvn --batch-mode release:clean release:prepare -DskipTests release:perform -s .circleci/settings.xml
 
       #                  mvn --batch-mode clean -DskipTests -Darguments=-DskipTests release:prepare release:perform -s .circleci/settings.xml
       - when:
@@ -65,13 +65,13 @@ jobs: # a collection of steps
             - run:
                 name: increase-major-version-step
                 command: |
-                  echo "build job, commit message without /"[major]/" >> $GIT_COMMIT_MESSAGE"
+                  echo "build job, commit message without /"[major]/" >> \"$GIT_COMMIT_MESSAGE"\"
                   mvn --batch-mode build-helper:parse-version versions:set -DnewVersion='${parsedVersion.majorVersion}.${parsedVersion.nextMinorVersion}.0-SNAPSHOT' versions:commit
             - run:
                 name: release-major-version-step
                 command: |
-                  echo "build job, commit message without /"[major]/" >> $GIT_COMMIT_MESSAGE"
-                  mvn --batch-mode release:clean release:prepare release:perform -Darguments="-Dmaven.javadoc.skip=true -Dmaven.test.skipTests=true -Dmaven.test.skip=true" -s .circleci/settings.xml
+                  echo "build job, commit message without /"[major]/" >> \"$GIT_COMMIT_MESSAGE"\"
+                  mvn --batch-mode release:clean release:prepare -DskipTests release:perform  -s .circleci/settings.xml
   #  -Darguments="-Dmaven.javadoc.skip=true -Dmaven.test.skipTests=true -Dmaven.test.skip=true"
   build_master:
     docker:
@@ -154,6 +154,24 @@ jobs: # a collection of steps
           command: mvn clean verify
 
 workflows:
+  build_minor:
+    jobs:
+      - build_prod:
+          context:
+            - PCLOUD
+          filters:
+            branches:
+              only:
+                - minor
+  build_major:
+    jobs:
+      - build_prod:
+          context:
+            - PCLOUD
+          filters:
+            branches:
+              only:
+                - major
   build_prod:
     jobs:
       - build_prod:
